@@ -1,5 +1,6 @@
 import Login from '@/router/constant/login';
-import Role from '@/router/async/role';
+import Role from '@/router/async/role/Role';
+import DashBoard from '@/router/async/dashBoard/dashBoard';
 import error404 from '@/router/constant/404';
 /**
  * <必填>
@@ -17,5 +18,6 @@ export const ConstantRouting = [
  * Home为登录成功后进入首页默认展示的菜单
  */
  export const AsynchronousRouting = [
-    ...Role
+    ...DashBoard,
+    ...Role,
 ]

@@ -84,7 +84,7 @@ export default defineComponent({
     const onMenuItemClick = (item: MenuItem) => {
       router.push(item.path);
     };
-    console.log(menu)
+    console.log(menu,'asd')
     const sidebarCollapsed = false;
     return {
       menu,

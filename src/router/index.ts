@@ -4,14 +4,7 @@ import { ConstantRouting, AsynchronousRouting } from './routerConfig'
 import store from '@/store/index'
 const routes: Array<RouteRecordRaw> = [
   ...ConstantRouting,
-  {
-    path: '/DashBoard',
-    name: 'BasicLayout',
-    component: () => import('@/layouts/BasicLayout.vue'),
-    children: [
-      ...AsynchronousRouting
-    ]
-  },
+  ...AsynchronousRouting
 ]
 // const menu = (store as any).state.user.menu;
 const router = createRouter({
