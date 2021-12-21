@@ -3,7 +3,7 @@ import { getToken } from '@/utils/auth';
 import { ConstantRouting, AsynchronousRouting } from './routerConfig'
 import store from '@/store/index'
 export const CONSTANT_ROUTES = ConstantRouting.map(i => i.path);
-export const initRouterAuth = (router: Router) => {
+export const initRouterAuth = (router: Router):void => {
   const hasPermission = (toPath: string) => {
     const menu = (store as any).state.user.menu;
     const menuUris = menu.map((i: menuItem) => i.path === toPath)
@@ -12,6 +12,10 @@ export const initRouterAuth = (router: Router) => {
   router.beforeEach((to, from, next) => {
     const menu = (store as any).state.user.menu;
     const token = getToken();
+    if (to.meta.anonymous) {
+      next()
+      return
+    }
     if (!token) {
       return next('/login');
     }
@@ -22,10 +26,7 @@ export const initRouterAuth = (router: Router) => {
       })
       return
     }
-    if (to.meta.anonymous) {
-      next()
-      return
-    }
+    
     if (!hasPermission(to.path)) {
       return
     }
