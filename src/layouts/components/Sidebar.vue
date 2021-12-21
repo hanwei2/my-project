@@ -1,6 +1,5 @@
 <template>
   <div class="side-bar">
-    
     <el-aside :class="sidebarCollapsed ? 'collapsed' : ''" class="sidebar" width="inherit">
         <div class="logo-container">
           <div class="logo">
@@ -16,19 +15,20 @@
               :default-active="activePath"
               :text-color="menuText"
           >
-            <template v-for="(item, $index) in menu" :key="$index">
-              <template v-if=" item.children?.length === 0">
+            <template v-for="(item, $index) in menuTree" :key="$index">
+              <template v-if=" !item.children || item.children.length === 0">
                 <el-menu-item
                     :index="item.path"
-                    @click="onMenuItemClick(i)"
+                    @click="onMenuItemClick(item)"
+                    v-PermissionPath="item.path"
                   >
                   <span class="menu-item-title">{{ item.name }}</span>
-                  
                 </el-menu-item>
               </template>
               <template v-else-if="item.children?.length > 0">
                 <el-sub-menu
                   :index="item.path"
+                  v-PermissionPath="item.path"
                 >
                   <template #title>
                       <span class="menu-item-title">{{ item.name }}</span>
@@ -38,16 +38,13 @@
                       :key="index"
                       :index="i.path"
                       @click="onMenuItemClick(i)"
-                    
+                      v-PermissionPath="i.path"
                   >
-                  <span class="menu-item-title">{{ i.name }}</span>
-                    
+                  <span class="menu-item-title">{{ item.name }}</span>
                   </el-menu-item>
                 </el-sub-menu>
               </template>
             </template>
-            
-            
           </el-menu>
          </div>
         
@@ -76,18 +73,17 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
     const layout = store.state.user;
-    const { menu } = layout;
-    console.log(route.meta)
+     const { menuTree } = layout;
+    console.log(menuTree,'asdas')
     const activePath = computed<string>(() => {
       return getPrimaryPath(route.path);
     });
     const onMenuItemClick = (item: MenuItem) => {
       router.push(item.path);
     };
-    console.log(menu,'asd')
     const sidebarCollapsed = false;
     return {
-      menu,
+      menuTree,
       activePath,
       onMenuItemClick,
       ...variables,

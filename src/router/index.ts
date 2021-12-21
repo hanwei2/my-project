@@ -2,10 +2,12 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { initRouterAuth } from '@/router/auth';
 import { ConstantRouting, AsynchronousRouting } from './routerConfig'
 import store from '@/store/index'
+
 const routes: Array<RouteRecordRaw> = [
   ...ConstantRouting,
   ...AsynchronousRouting
 ]
+console.log(AsynchronousRouting)
 // const menu = (store as any).state.user.menu;
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
