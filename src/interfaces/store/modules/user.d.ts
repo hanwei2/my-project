@@ -10,7 +10,7 @@ interface userInfo {
     userName: string
 }
 
-interface menuItem {
+declare interface menuItem {
     path: string,
     id: number,
     name: string,
