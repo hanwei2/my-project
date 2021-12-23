@@ -73,8 +73,7 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
     const layout = store.state.user;
-     const { menuTree } = layout;
-    console.log(menuTree,'asdas')
+    const { menuTree } = layout;
     const activePath = computed<string>(() => {
       return getPrimaryPath(route.path);
     });

@@ -4,9 +4,11 @@
     <el-container :class="sidebarCollapsed ? 'collapsed' : ''" class="container">
       <Header/>
       <!-- <TabsView/> -->
-      <div class="container-body">
-        <router-view/>
-      </div>
+      <el-main>
+          <div class="container-body">
+            <router-view/>
+          </div>
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -52,12 +54,16 @@ export default defineComponent({
       left: $sidebarWidthCollapsed;
       width: calc(100vw - #{$sidebarWidthCollapsed});
     }
-
-    .container-body {
-      background-color: $containerBg;
-      height: calc(100vh - #{$headerHeight} - #{$tabsViewHeight});
-      overflow: auto;
+    .el-main{
+      background: $infoMainColor;
+      .container-body {
+        background-color: $containerBg;
+        height: calc(100vh - #{$headerHeight} - #{$tabsViewHeight});
+        overflow: auto;
+        padding: 20px;
+      }
     }
+    
   }
 }
 </style>
