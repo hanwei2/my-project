@@ -40,7 +40,7 @@
                       @click="onMenuItemClick(i)"
                       v-PermissionPath="i.path"
                   >
-                  <span class="menu-item-title">{{ item.name }}</span>
+                  <span class="menu-item-title">{{ i.name }}</span>
                   </el-menu-item>
                 </el-sub-menu>
               </template>
@@ -80,6 +80,7 @@ export default defineComponent({
     const onMenuItemClick = (item: MenuItem) => {
       router.push(item.path);
     };
+    console.log(activePath)
     const sidebarCollapsed = false;
     return {
       menuTree,

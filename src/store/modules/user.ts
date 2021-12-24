@@ -2,14 +2,13 @@ import { Commit } from 'vuex';
 const state: user = {
     menu: [],
     menuTree: [],
-    apis: [1],
+    apis: [],
     userId: 0,
     userName: '',
 }
 const mutations = {
     setMenu(state: user, menus: Array<any>) {
         state.menu = menus;
-        console.log(menus)
     },
     setApis(state: user, apis: Array<any>) {
         state.apis = apis;
@@ -28,7 +27,6 @@ const mutations = {
             }
         });
         state.menuTree = parentMenu
-        console.log(parentMenu,'parentMenu')
     }
 }
 const actions = {
@@ -37,7 +35,7 @@ const actions = {
             userId: 1,
             userName: '我是东山啊'
         }
-        const apis:Array<string> = [];
+        const apis:Array<string> = ['/dashBoard'];
         const menus = [
             {
                 path: '/dashBoard',
