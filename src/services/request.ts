@@ -1,17 +1,9 @@
-import axios, {AxiosRequestConfig} from 'axios';
-
-// TODO: request interception
-
-// TODO: response interception
+import axios, { AxiosRequestConfig } from 'axios';
 
 const useRequest = () => {
-  // implementation
   const baseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:8000';
-
   const request = async <R = any>(opts: AxiosRequestConfig): Promise<R> => {
-    // base url
     const baseURL = baseUrl;
-
     // headers
     const headers = {} as any;
 
@@ -75,38 +67,6 @@ const useRequest = () => {
     return await request<R>(opts);
   };
 
-  const getList = async <T = any>(url: string, params?: ListRequestParams, opts?: AxiosRequestConfig) => {
-    // normalize conditions
-    if (params && Array.isArray(params.conditions)) {
-      params.conditions = JSON.stringify(params.conditions);
-    }
-
-    // get request
-    const res = await get<T, ResponseWithListData<T>, ListRequestParams>(url, params, opts);
-
-    // normalize array data
-    if (!res.data) {
-      res.data = [];
-    }
-
-    return res;
-  };
-
-  const getAll = async <T = any>(url: string, opts?: AxiosRequestConfig) => {
-    return await getList(url, {}, opts);
-  };
-
-  const postList = async <T = any, R = Response, PM = any>(url: string, data?: BatchRequestPayloadWithJsonStringData, params?: PM, opts?: AxiosRequestConfig): Promise<R> => {
-    return await post<BatchRequestPayloadWithJsonStringData, R, PM>(url, data, params, opts);
-  };
-
-  const putList = async <T = any, R = ResponseWithListData, PM = any>(url: string, data?: T[], params?: PM, opts?: AxiosRequestConfig): Promise<R> => {
-    return await put<T[], R, PM>(url, data, params, opts);
-  };
-
-  const delList = async <T = any, R = Response, PM = any>(url: string, data?: BatchRequestPayload, params?: PM, opts?: AxiosRequestConfig): Promise<R> => {
-    return await del<BatchRequestPayload, R, PM>(url, data, params, opts);
-  };
 
   return {
     // public variables and methods
@@ -115,12 +75,7 @@ const useRequest = () => {
     get,
     post,
     put,
-    del,
-    getList,
-    getAll,
-    postList,
-    putList,
-    delList,
+    del
   };
 };
 
