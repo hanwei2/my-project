@@ -5,7 +5,7 @@ interface ElFormRule {
     validator: ElFormValidator;
 }
 export interface LoginForm {
-    account: string | number;
+    account: string;
     password: string;
     rememberLogin?: boolean
 }

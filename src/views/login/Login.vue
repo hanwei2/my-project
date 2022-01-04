@@ -1,44 +1,44 @@
 <template>
   <div class="login-container">
-      <el-form
-        ref="loginFormRef"
-        :model="loginForm"
-        :rules="loginRules"
-        auto-complete="on"
-        class="login-form"
-        label-position="left"
+    <el-form
+      ref="loginFormRef"
+      :model="loginForm"
+      :rules="loginRules"
+      auto-complete="on"
+      class="login-form"
+      label-position="left"
     >
       <h3 class="title">
-        <img :src="logo" alt="logo" className="logo-img"/>
+        <img :src="logo" alt="logo" className="logo-img" />
         <span class="logo-title">Crawlab</span>
       </h3>
-      <el-form-item prop="account" style="margin-bottom: 28px;">
+      <el-form-item prop="account" style="margin-bottom: 28px">
         <el-input
-            v-model="loginForm.account"
-            :placeholder="'account'"
-            auto-complete="on"
-            name="account"
-            type="text"
-            @keyup.enter="onLogin"
+          v-model="loginForm.account"
+          :placeholder="'account'"
+          auto-complete="on"
+          name="account"
+          type="text"
+          @keyup.enter="onLogin"
         />
       </el-form-item>
-      <el-form-item prop="password" style="margin-bottom: 28px;">
+      <el-form-item prop="password" style="margin-bottom: 28px">
         <el-input
-            v-model="loginForm.password"
-            :placeholder="'Password'"
-            auto-complete="on"
-            name="password"
-            type="password"
-            @keyup.enter="onLogin"
+          v-model="loginForm.password"
+          :placeholder="'Password'"
+          auto-complete="on"
+          name="password"
+          type="password"
+          @keyup.enter="onLogin"
         />
       </el-form-item>
       <el-form-item style="border: none">
         <el-button
-            v-if="!isSignup"
-            :loading="loading"
-            style="width:100%;"
-            type="primary"
-            @click="onLogin"
+          v-if="!isSignup"
+          :loading="loading"
+          style="width: 100%"
+          type="primary"
+          @click="onLogin"
         >
           登录
         </el-button>
@@ -48,22 +48,19 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, ref} from 'vue';
-import {isValidUsername} from '@/utils/validate';
-import {useRoute, useRouter} from 'vue-router';
-import logo from '@/assets/logo.png';
-import {ElForm, ElMessage} from 'element-plus';
-import useRequest from '@/services/request';
-import {useStore} from 'vuex';
-import {LoginForm, LoginRules} from '@/interfaces/views/login'
-const {
-  post,
-} = useRequest();
+import { computed, defineComponent, ref } from "vue";
+import { isValidUsername } from "@/utils/validate";
+import { useRoute, useRouter } from "vue-router";
+import logo from "@/assets/logo.png";
+import { ElForm, ElMessage } from "element-plus";
+import useRequest from "@/services/request";
+import { useStore } from "vuex";
+import { LoginForm, LoginRules } from "@/interfaces/views/login";
+const { post } = useRequest();
 
 export default defineComponent({
-  name: 'Login',
+  name: "Login",
   setup() {
-
     const route = useRoute();
 
     const router = useRouter();
@@ -72,19 +69,18 @@ export default defineComponent({
 
     const store = useStore();
 
-
-    const isSignup = computed(() => route.path === '/signup');
+    const isSignup = computed(() => route.path === "/signup");
 
     const loginForm = ref<LoginForm>({
-      account: '',
-      password: '',
+      account: "",
+      password: "",
     });
 
     const loginFormRef = ref<typeof ElForm>();
 
     const validateUsername = (rule: any, value: any, callback: any) => {
       if (!isValidUsername(value)) {
-        callback(new Error('请输入正确的用户名'));
+        callback(new Error("请输入正确的用户名"));
       } else {
         callback();
       }
@@ -92,15 +88,17 @@ export default defineComponent({
 
     const validatePass = (rule: any, value: any, callback: any) => {
       if (value.length < 5) {
-        callback(new Error('密码长度应不小于5'));
+        callback(new Error("密码长度应不小于5"));
       } else {
         callback();
       }
     };
 
     const loginRules: LoginRules = {
-      account: [{required: true, trigger: 'blur', validator: validateUsername}],
-      password: [{required: true, trigger: 'blur', validator: validatePass}]
+      account: [
+        { required: true, trigger: "blur", validator: validateUsername },
+      ],
+      password: [{ required: true, trigger: "blur", validator: validatePass }],
     };
 
     const isShowMobileWarning = ref<boolean>(false);
@@ -110,24 +108,24 @@ export default defineComponent({
     const onLogin = async () => {
       if (!loginFormRef.value) return;
       await loginFormRef.value.validate();
-      const {account, password} = loginForm.value;
+      const { account, password } = loginForm.value;
       loading.value = true;
+      var form = new FormData();
+      form.append("account", account);
+      form.append("password", password);
+      form.append("rememberLogin", 'true');
       try {
-        const res = await post<LoginForm, ResponseWithData>('/_Account/Login', {
-          account,
-          password,
-          rememberLogin: true
-        });
+        const res = await post<any, ResponseWithData>("/_Account/Login", form);
         if (!res.data) {
-          ElMessage.error('No token returned');
+          ElMessage.error("No token returned");
           return;
         }
-        localStorage.setItem('token', 'res.data');
-        store.dispatch('user/reloadUserPermissions')
-        await router.push('/role');
-      } catch (e:any) {
-        if (e.toString().includes('401')) {
-          ElMessage.error('Unauthorized. Please check account and password.');
+        localStorage.setItem("token", "res.data");
+        store.dispatch("user/reloadUserPermissions");
+        await router.push("/role");
+      } catch (e: any) {
+        if (e.toString().includes("401")) {
+          ElMessage.error("Unauthorized. Please check account and password.");
         } else {
           ElMessage.error(e.toString());
         }
@@ -147,7 +145,7 @@ export default defineComponent({
       logo,
       onLogin,
     };
-  }
+  },
 });
 </script>
 
@@ -200,7 +198,7 @@ $light_gray: #aaa;
     /*font-style: italic;*/
     font-weight: 600;
     font-size: 24px;
-    color: #409EFF;
+    color: #409eff;
     margin: 0px auto 20px auto;
     text-align: center;
     cursor: default;
@@ -214,7 +212,9 @@ $light_gray: #aaa;
     }
 
     .logo-title {
-      font-family: BlinkMacSystemFont, -apple-system, segoe ui, roboto, oxygen, ubuntu, cantarell, fira sans, droid sans, helvetica neue, helvetica, arial, sans-serif;
+      font-family: BlinkMacSystemFont, -apple-system, segoe ui, roboto, oxygen,
+        ubuntu, cantarell, fira sans, droid sans, helvetica neue, helvetica,
+        arial, sans-serif;
       font-size: 56px;
       font-weight: 600;
       margin-left: 24px;
@@ -232,12 +232,9 @@ $light_gray: #aaa;
     user-select: none;
   }
 
-
-
   .mobile-warning {
     margin-top: 20px;
   }
-
 }
 </style>
 <style scoped>
