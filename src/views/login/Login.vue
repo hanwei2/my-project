@@ -12,12 +12,12 @@
         <img :src="logo" alt="logo" className="logo-img"/>
         <span class="logo-title">Crawlab</span>
       </h3>
-      <el-form-item prop="username" style="margin-bottom: 28px;">
+      <el-form-item prop="account" style="margin-bottom: 28px;">
         <el-input
-            v-model="loginForm.username"
-            :placeholder="'Username'"
+            v-model="loginForm.account"
+            :placeholder="'account'"
             auto-complete="on"
-            name="username"
+            name="account"
             type="text"
             @keyup.enter="onLogin"
         />
@@ -55,6 +55,7 @@ import logo from '@/assets/logo.png';
 import {ElForm, ElMessage} from 'element-plus';
 import useRequest from '@/services/request';
 import {useStore} from 'vuex';
+import {LoginForm, LoginRules} from '@/interfaces/views/login'
 const {
   post,
 } = useRequest();
@@ -75,7 +76,7 @@ export default defineComponent({
     const isSignup = computed(() => route.path === '/signup');
 
     const loginForm = ref<LoginForm>({
-      username: '',
+      account: '',
       password: '',
     });
 
@@ -98,7 +99,7 @@ export default defineComponent({
     };
 
     const loginRules: LoginRules = {
-      username: [{required: true, trigger: 'blur', validator: validateUsername}],
+      account: [{required: true, trigger: 'blur', validator: validateUsername}],
       password: [{required: true, trigger: 'blur', validator: validatePass}]
     };
 
@@ -109,23 +110,24 @@ export default defineComponent({
     const onLogin = async () => {
       if (!loginFormRef.value) return;
       await loginFormRef.value.validate();
-      const {username, password} = loginForm.value;
+      const {account, password} = loginForm.value;
       loading.value = true;
       try {
-        // const res = await post<LoginForm, ResponseWithData>('/login', {
-        //   username,
-        //   password,
-        // });
-        // if (!res.data) {
-        //   ElMessage.error('No token returned');
-        //   return;
-        // }
+        const res = await post<LoginForm, ResponseWithData>('/_Account/Login', {
+          account,
+          password,
+          rememberLogin: true
+        });
+        if (!res.data) {
+          ElMessage.error('No token returned');
+          return;
+        }
         localStorage.setItem('token', 'res.data');
         store.dispatch('user/reloadUserPermissions')
         await router.push('/role');
       } catch (e:any) {
         if (e.toString().includes('401')) {
-          ElMessage.error('Unauthorized. Please check username and password.');
+          ElMessage.error('Unauthorized. Please check account and password.');
         } else {
           ElMessage.error(e.toString());
         }

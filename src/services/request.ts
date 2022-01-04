@@ -1,19 +1,18 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 const useRequest = () => {
-  const baseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:8000';
+  const baseUrl = '/api'; // process.env.VUE_APP_API_BASE_URL
   const request = async <R = any>(opts: AxiosRequestConfig): Promise<R> => {
     const baseURL = baseUrl;
     // headers
     const headers = {} as any;
 
     // add token to headers
-    const token = localStorage.getItem('token');
-    if (token) {
-      headers['Authorization'] = token;
-    }
-
-    // axios response
+    // const token = localStorage.getItem('token');
+    // if (token) {
+    //   headers['Authorization'] = token;
+    // }
+    // axios response'
     const res = await axios.request({
       ...opts,
       baseURL,
@@ -69,7 +68,6 @@ const useRequest = () => {
 
 
   return {
-    // public variables and methods
     baseUrl,
     request,
     get,
